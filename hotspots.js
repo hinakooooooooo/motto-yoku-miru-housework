@@ -1,0 +1,7 @@
+import * as T from './vendor/three.module.js';
+// Small facial regions never overlap in local Y. Hit meshes render no pixels.
+export function createHotspots(worker,routes){const proxies=[],visuals=new Map();for(const route of routes){const list=[];worker.group.traverse(o=>{if(o.name===route.targetObjectName){o.traverse(c=>{if(c.isMesh&&!(route.id==='head'&&['eyes','mouth','ear'].includes(c.name)))list.push(c);});}});if(route.id==='pocket')list.push(worker.group.getObjectByName('pocket-fabric'));if(route.id==='hem')list.push(worker.group.getObjectByName('apron-cloth'));visuals.set(route.id,[...new Set(list)]);}
+ const specs=[['head',[0,4.18,.15],[1.18,.48,.9]],['eyes',[0,3.675,.62],[1.02,.24,.28]],['hand',[-.7,1.68,.24],[.37,.34,.38]],['pocket',[0,1.68,.49],[.58,.39,.23]],['bag',[.78,.98,.06],[.7,.75,.4]],['sleeve',[-.65,2.39,.10],[.4,.52,.47]],['shoes',[0,.22,.15],[1.12,.44,.85]],['hem',[-.22,1.02,.43],[.57,.30,.21]]];
+ const hitMaterial=new T.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:false,colorWrite:false});for(const [id,center,size] of specs){if(!routes.some(r=>r.id===id))continue;const m=new T.Mesh(new T.BoxGeometry(...size),hitMaterial);m.position.fromArray(center);m.userData.hotspot=id;m.name='hit-'+id;m.renderOrder=-100;worker.group.add(m);proxies.push(m);}
+ return{proxies,visuals};}
+export function pickHotspot(ray,proxies){const hits=ray.intersectObjects(proxies,false);return hits[0]?.object.userData.hotspot||null;}
