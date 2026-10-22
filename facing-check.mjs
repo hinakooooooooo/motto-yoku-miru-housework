@@ -1,0 +1,2 @@
+import assert from 'node:assert/strict';import * as T from './dist/vendor/three.module.js';import {sceneFactories} from './dist/scenes.js';import {contents} from './dist/content.js';
+for(const c of contents){assert(c.shortTitle.endsWith('で賞'));assert(!c.caption.includes('で賞'));const d=sceneFactories[c.id]();let min=Infinity;for(let t=0;t<=7.5;t+=.05){d.update(t);for(const [i,point] of d.hero.actionTargets){const local=d.hero.hands[i].position;min=Math.min(min,local.z);}}console.log(c.id,'min hand forward',min.toFixed(3));assert(min>-.08,c.id+' reaching backwards');}

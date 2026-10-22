@@ -1,0 +1,8 @@
+家事をする｜もっとよくみる
+
+すぐに開く：dist/experience.html をブラウザで開いてください。
+編集する：dist 内のJS・CSS・HTMLを編集してください。
+編集後は node build-standalone.mjs で experience.html を再生成できます。
+
+洗剤・洗い物の前後配置を反転した最新版です。
+公開版と同じソースコミット：6bd01f64e456e03652fd507ffa1227a0c0cc8746
